@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 public class PlacasMensalistas {
     @Id
     private String placa;
+    private LocalDateTime entrada;
+    private LocalDateTime saida;
     @ManyToOne
     @JoinColumn(name = "cliente_mensalista_id")
     private ClientesMensalistas clienteMensalista;

@@ -21,6 +21,6 @@ public class ClientesMensalistas {
     private String nome;
     private String cpf;
     private String tel;
-    @OneToMany(mappedBy = "clienteMensalista")
+    @OneToMany(mappedBy = "clienteMensalista",cascade = CascadeType.ALL)
     private List<PlacasMensalistas> placas = new ArrayList<>();
 }
