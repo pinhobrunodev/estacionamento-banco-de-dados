@@ -2,12 +2,13 @@ package br.com.ucsal.estacionamento.services;
 
 import br.com.ucsal.estacionamento.dto.PlacaMensalistaDTO;
 import br.com.ucsal.estacionamento.dto.RegistrarMensalistaDTO;
-import br.com.ucsal.estacionamento.entity.*;
+import br.com.ucsal.estacionamento.entity.ClientesMensalistas;
+import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
+import br.com.ucsal.estacionamento.entity.Vaga;
 import br.com.ucsal.estacionamento.repositories.ClienteMensalistaRepository;
 import br.com.ucsal.estacionamento.repositories.PlacasMensalistasRepository;
 import br.com.ucsal.estacionamento.repositories.TabelaPrecoRepository;
 import br.com.ucsal.estacionamento.repositories.VagaRepository;
-import br.com.ucsal.estacionamento.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,13 @@ public class ClienteMensalistaService {
 
 
     @Autowired
-    TabelaPrecoRepository tabelaPrecoRepository;
+    private TabelaPrecoRepository tabelaPrecoRepository;
     @Autowired
-    VagaRepository vagaRepository;
+    private VagaRepository vagaRepository;
     @Autowired
-    ClienteMensalistaRepository clienteMensalistaRepository;
+    private ClienteMensalistaRepository clienteMensalistaRepository;
     @Autowired
-    PlacasMensalistasRepository placasMensalistasRepository;
+    private PlacasMensalistasRepository placasMensalistasRepository;
 
     @Transactional
     public void registrarEntrada(String cpf) {

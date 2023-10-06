@@ -12,13 +12,13 @@ public class ClienteHoristaController {
     @Autowired
     private ClienteHoristaService service;
 
-    @PostMapping(value = "/registrar-entrada")
+    @PostMapping(value = "/registrar-entrada-horista")
     private ResponseEntity<Void> registrarEntrada(@RequestBody String placa) {
         service.registrarEntrada(placa);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping(value = "/registrar-saida/{placa}")
+    @PatchMapping(value = "/registrar-saida-horista/{placa}")
     private ResponseEntity<String> registrarSaida(@PathVariable String placa) {
         return ResponseEntity.ok(service.registrarSaida(placa));
     }

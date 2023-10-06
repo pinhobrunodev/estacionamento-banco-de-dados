@@ -13,17 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Service
 public class ClienteHoristaService {
 
     @Autowired
-    ClienteHoristaRepository clienteHoristaRepository;
+    private ClienteHoristaRepository clienteHoristaRepository;
     @Autowired
-    TabelaPrecoRepository tabelaPrecoRepository;
+    private TabelaPrecoRepository tabelaPrecoRepository;
     @Autowired
-    VagaRepository vagaRepository;
+    private VagaRepository vagaRepository;
 
     @Transactional
     public void registrarEntrada(String placa) {
