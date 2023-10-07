@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Objects;
 
 public interface VagaRepository extends JpaRepository<Vaga, Long> {
 
@@ -21,40 +20,20 @@ public interface VagaRepository extends JpaRepository<Vaga, Long> {
     @Query(value = "SELECT COUNT(*)  FROM VAGA  WHERE mensalista = TRUE AND ocupada = FALSE", nativeQuery = true)
     Long quantidadeVagasMensalistasLivre();
 
+    @Query(value = "SELECT COUNT(*)  FROM VAGA  WHERE mensalista = FALSE AND ocupada = TRUE", nativeQuery = true)
+    Long quantidadeVagasHoristasOcupado();
+
+    @Query(value = "SELECT COUNT(*)  FROM VAGA  WHERE mensalista = TRUE AND ocupada = TRUE", nativeQuery = true)
+    Long quantidadeVagasMensalistasOcupado();
+
+
     @Query(value = "SELECT *  FROM VAGA  WHERE placa = ?1", nativeQuery = true)
     Vaga capturaVagaPelaPlaca(String placa);
 
-    @Query(value = """
-            WITH ocupadoHorista AS (
-                SELECT 'ocupadoHorista' AS TIPO, V.ID, V.PLACA,
-                    CONCAT(
-                        EXTRACT(DAY FROM PH.ENTRADA), '/',
-                        EXTRACT(MONTH FROM PH.ENTRADA), '/',
-                        EXTRACT(YEAR FROM PH.ENTRADA), ' ',
-                        EXTRACT(HOUR FROM PH.ENTRADA), ':',
-                        EXTRACT(MINUTE FROM PH.ENTRADA), ':',
-                        EXTRACT(SECOND FROM PH.ENTRADA)
-                    ) AS formatted_entrada
-                FROM VAGA V\s
-                INNER JOIN PLACAS_HORISTAS PH ON PH.PLACA = V.PLACA\s
-                WHERE V.OCUPADA = TRUE AND V.MENSALISTA = FALSE
-            ),
-            ocupadoMensalista AS (
-                SELECT 'ocupadoMensalista' AS TIPO, V.ID, V.PLACA,
-                    CONCAT(
-                        EXTRACT(DAY FROM PM.ENTRADA), '/',
-                        EXTRACT(MONTH FROM PM.ENTRADA), '/',
-                        EXTRACT(YEAR FROM PM.ENTRADA), ' ',
-                        EXTRACT(HOUR FROM PM.ENTRADA), ':',
-                        EXTRACT(MINUTE FROM PM.ENTRADA), ':',
-                        EXTRACT(SECOND FROM PM.ENTRADA)
-                    ) AS formatted_entrada
-                FROM VAGA V\s
-                INNER JOIN PLACAS_MENSALISTAS PM ON PM.PLACA = V.PLACA\s
-                WHERE V.OCUPADA = TRUE AND V.MENSALISTA = TRUE
-            )
-            SELECT * FROM ocupadoHorista\s
-            UNION ALL
-            SELECT * FROM ocupadoMensalista""", nativeQuery = true)
-    List<Object[]> capturaStatusDasVagas();
+
+    @Query(value = "SELECT V.ID,V.PLACA,PH.ENTRADA FROM VAGA V INNER JOIN PLACAS_HORISTAS PH ON PH.PLACA = V.PLACA WHERE V.MENSALISTA = FALSE AND V.OCUPADA = TRUE", nativeQuery = true)
+    List<Object[]> capturaHoristasEstacionados();
+
+    @Query(value = "SELECT V.ID,V.PLACA,PM.ENTRADA,CM.CPF FROM VAGA V INNER JOIN PLACAS_MENSALISTAS PM ON PM.PLACA = V.PLACA INNER JOIN CLIENTES_MENSALISTAS CM ON CM.ID = PM.CLIENTE_MENSALISTA_ID WHERE V.MENSALISTA = TRUE  AND V.OCUPADA = TRUE", nativeQuery = true)
+    List<Object[]> capturaMensalistasEstacionados();
 }

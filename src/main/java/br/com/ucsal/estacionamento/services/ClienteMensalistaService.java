@@ -2,6 +2,7 @@ package br.com.ucsal.estacionamento.services;
 
 import br.com.ucsal.estacionamento.dto.PlacaMensalistaDTO;
 import br.com.ucsal.estacionamento.dto.RegistrarMensalistaDTO;
+import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasEstacionados;
 import br.com.ucsal.estacionamento.entity.ClientesMensalistas;
 import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
 import br.com.ucsal.estacionamento.entity.Vaga;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -89,5 +91,20 @@ public class ClienteMensalistaService {
                 placasMensalistasRepository.save(placaMensalistaSelecionada);
             }
         });
+    }
+
+    @Transactional(readOnly = true)
+    public List<TrazerClientesMensalistasEstacionados> trazerMensalistasEstacionados() {
+        List<TrazerClientesMensalistasEstacionados> mensalistasEstacionados = new ArrayList<>();
+        List<Object[]> resultado = vagaRepository.capturaMensalistasEstacionados();
+        for (Object[] linha : resultado) {
+            TrazerClientesMensalistasEstacionados trazerClientesMensalistaEstacionados = new TrazerClientesMensalistasEstacionados();
+            trazerClientesMensalistaEstacionados.setId((Long) linha[0]);
+            trazerClientesMensalistaEstacionados.setPlaca((String) linha[1]);
+            trazerClientesMensalistaEstacionados.setDataHoraEntrada((Date) linha[2]);
+            trazerClientesMensalistaEstacionados.setCpf((String) linha[3]);
+            mensalistasEstacionados.add(trazerClientesMensalistaEstacionados);
+        }
+        return mensalistasEstacionados;
     }
 }

@@ -1,5 +1,6 @@
 package br.com.ucsal.estacionamento.services;
 
+import br.com.ucsal.estacionamento.dto.TrazerClientesHoristasEstacionados;
 import br.com.ucsal.estacionamento.entity.PlacasHoristas;
 import br.com.ucsal.estacionamento.entity.TabelaPreco;
 import br.com.ucsal.estacionamento.entity.Vaga;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ClienteHoristaService {
@@ -63,4 +67,17 @@ public class ClienteHoristaService {
         return duracao.toHours() * tabelaPrecoHorista.getPreco();
     }
 
+    @Transactional(readOnly = true)
+    public List<TrazerClientesHoristasEstacionados> trazerHoristasEstacionados() {
+        List<TrazerClientesHoristasEstacionados> horistasEstacionados = new ArrayList<>();
+        List<Object[]> resultado = vagaRepository.capturaHoristasEstacionados();
+        for (Object[] linha : resultado) {
+            TrazerClientesHoristasEstacionados trazerClientesHoristasEstacionados = new TrazerClientesHoristasEstacionados();
+            trazerClientesHoristasEstacionados.setId((Long) linha[0]);
+            trazerClientesHoristasEstacionados.setPlaca((String) linha[1]);
+            trazerClientesHoristasEstacionados.setDataHoraEntrada((Date) linha[2]);
+            horistasEstacionados.add(trazerClientesHoristasEstacionados);
+        }
+        return horistasEstacionados;
+    }
 }

@@ -1,7 +1,6 @@
 package br.com.ucsal.estacionamento.repositories;
 
 import br.com.ucsal.estacionamento.entity.ClientesMensalistas;
-import br.com.ucsal.estacionamento.entity.PlacasHoristas;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
