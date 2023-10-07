@@ -2,6 +2,7 @@ package br.com.ucsal.estacionamento.services;
 
 import br.com.ucsal.estacionamento.dto.PlacaMensalistaDTO;
 import br.com.ucsal.estacionamento.dto.RegistrarMensalistaDTO;
+import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasCriadosDTO;
 import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasEstacionados;
 import br.com.ucsal.estacionamento.entity.ClientesMensalistas;
 import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteMensalistaService {
@@ -106,5 +108,10 @@ public class ClienteMensalistaService {
             mensalistasEstacionados.add(trazerClientesMensalistaEstacionados);
         }
         return mensalistasEstacionados;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TrazerClientesMensalistasCriadosDTO> trazerMensalistas() {
+        return clienteMensalistaRepository.findAll().stream().map(TrazerClientesMensalistasCriadosDTO::new).collect(Collectors.toList());
     }
 }

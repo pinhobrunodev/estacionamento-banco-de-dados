@@ -1,6 +1,7 @@
 package br.com.ucsal.estacionamento.controllers;
 
 import br.com.ucsal.estacionamento.dto.RegistrarMensalistaDTO;
+import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasCriadosDTO;
 import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasEstacionados;
 import br.com.ucsal.estacionamento.services.ClienteMensalistaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,10 @@ public class ClienteMensalistaController {
     @GetMapping(value = "/trazer-mensalistas-estacionados")
     public ResponseEntity<List<TrazerClientesMensalistasEstacionados>> trazerMensalistasEstacionados(){
         return ResponseEntity.ok(service.trazerMensalistasEstacionados());
+    }
+
+    @GetMapping(value = "/trazer-mensalistas-criados")
+    public ResponseEntity<List<TrazerClientesMensalistasCriadosDTO>> trazerMensalistas(){
+        return ResponseEntity.ok(service.trazerMensalistas());
     }
 }
