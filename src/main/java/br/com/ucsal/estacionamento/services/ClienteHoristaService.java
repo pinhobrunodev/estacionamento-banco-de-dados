@@ -2,9 +2,11 @@ package br.com.ucsal.estacionamento.services;
 
 import br.com.ucsal.estacionamento.dto.TrazerClientesHoristasEstacionados;
 import br.com.ucsal.estacionamento.entity.PlacasHoristas;
+import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
 import br.com.ucsal.estacionamento.entity.TabelaPreco;
 import br.com.ucsal.estacionamento.entity.Vaga;
 import br.com.ucsal.estacionamento.repositories.ClienteHoristaRepository;
+import br.com.ucsal.estacionamento.repositories.PlacasMensalistasRepository;
 import br.com.ucsal.estacionamento.repositories.TabelaPrecoRepository;
 import br.com.ucsal.estacionamento.repositories.VagaRepository;
 import br.com.ucsal.estacionamento.utils.Utils;
@@ -23,6 +25,8 @@ public class ClienteHoristaService {
 
     @Autowired
     private ClienteHoristaRepository clienteHoristaRepository;
+    @Autowired
+    private PlacasMensalistasRepository placasMensalistasRepository;
     @Autowired
     private TabelaPrecoRepository tabelaPrecoRepository;
     @Autowired
@@ -71,11 +75,23 @@ public class ClienteHoristaService {
     public List<TrazerClientesHoristasEstacionados> trazerHoristasEstacionados() {
         List<TrazerClientesHoristasEstacionados> horistasEstacionados = new ArrayList<>();
         List<Object[]> resultado = vagaRepository.capturaHoristasEstacionados();
+        List<Object[]> resultadoMensalistasEmVagasDeHorista = vagaRepository.capturaMensalistasEmVagasDeHorista();
         for (Object[] linha : resultado) {
+            String placa = (String) linha[1];
             TrazerClientesHoristasEstacionados trazerClientesHoristasEstacionados = new TrazerClientesHoristasEstacionados();
             trazerClientesHoristasEstacionados.setId((Long) linha[0]);
-            trazerClientesHoristasEstacionados.setPlaca((String) linha[1]);
+            trazerClientesHoristasEstacionados.setPlaca(placa);
             trazerClientesHoristasEstacionados.setDataHoraEntrada((Date) linha[2]);
+            trazerClientesHoristasEstacionados.setIsHorista(false);
+            horistasEstacionados.add(trazerClientesHoristasEstacionados);
+        }
+        for (Object[] linha2 : resultadoMensalistasEmVagasDeHorista) {
+            String placa = (String) linha2[1];
+            TrazerClientesHoristasEstacionados trazerClientesHoristasEstacionados = new TrazerClientesHoristasEstacionados();
+            trazerClientesHoristasEstacionados.setId((Long) linha2[0]);
+            trazerClientesHoristasEstacionados.setPlaca(placa);
+            trazerClientesHoristasEstacionados.setDataHoraEntrada((Date) linha2[2]);
+            trazerClientesHoristasEstacionados.setIsHorista(true);
             horistasEstacionados.add(trazerClientesHoristasEstacionados);
         }
         return horistasEstacionados;

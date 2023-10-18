@@ -15,6 +15,7 @@ public class TrazerClientesHoristasEstacionados {
     private String placa;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:MM:ss")
     private Date dataHoraEntrada;
+    private Boolean isHorista;
 
 
 }

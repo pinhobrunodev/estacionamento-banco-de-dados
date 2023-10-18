@@ -36,4 +36,7 @@ public interface VagaRepository extends JpaRepository<Vaga, Long> {
 
     @Query(value = "SELECT V.ID,V.PLACA,PM.ENTRADA,CM.CPF FROM VAGA V INNER JOIN PLACAS_MENSALISTAS PM ON PM.PLACA = V.PLACA INNER JOIN CLIENTES_MENSALISTAS CM ON CM.ID = PM.CLIENTE_MENSALISTA_ID WHERE V.MENSALISTA = TRUE  AND V.OCUPADA = TRUE", nativeQuery = true)
     List<Object[]> capturaMensalistasEstacionados();
+
+    @Query(value = "SELECT V.ID,PM.PLACA,PM.ENTRADA FROM VAGA V INNER JOIN PLACAS_MENSALISTAS PM ON PM.PLACA = V.PLACA WHERE V.MENSALISTA = FALSE", nativeQuery = true)
+    List<Object[]> capturaMensalistasEmVagasDeHorista();
 }

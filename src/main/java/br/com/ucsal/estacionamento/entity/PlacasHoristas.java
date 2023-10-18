@@ -19,4 +19,5 @@ public class PlacasHoristas {
     private String placa;
     private LocalDateTime entrada;
     private LocalDateTime saida;
+
 }
