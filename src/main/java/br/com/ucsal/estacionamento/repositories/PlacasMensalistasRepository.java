@@ -10,6 +10,8 @@ public interface PlacasMensalistasRepository extends JpaRepository<PlacasMensali
     @Query(value = "SELECT * FROM PLACAS_MENSALISTAS WHERE cliente_mensalista_id = ?1 AND placa = ?2", nativeQuery = true)
     PlacasMensalistas selecionaVeiculoPeloIdMensalistaEPlaca(Long id,String placa);
 
+    boolean existsByPlaca(String placa);
+
 
 
 

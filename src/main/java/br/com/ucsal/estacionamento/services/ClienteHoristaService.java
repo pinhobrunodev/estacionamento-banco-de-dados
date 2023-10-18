@@ -51,6 +51,14 @@ public class ClienteHoristaService {
 
     @Transactional
     public String registrarSaida(String placa) {
+        boolean placaMensalista = placasMensalistasRepository.existsByPlaca(placa);
+        if (placaMensalista){
+            Vaga vagaQueFicouLivre = vagaRepository.capturaVagaPelaPlaca(placa);        vagaQueFicouLivre.setPlaca(null);
+            vagaQueFicouLivre.setPlaca(null);
+            vagaQueFicouLivre.setOcupada(Boolean.FALSE);
+            vagaRepository.save(vagaQueFicouLivre);
+            return "Não é necessário pagar a taxa, pois é um cliente mensalista que saiu de uma vaga horista";
+        }
         PlacasHoristas placaHorista = clienteHoristaRepository.findById(placa).orElseThrow(() -> new RuntimeException("n achou"));
         placaHorista.setSaida(LocalDateTime.now());
         TabelaPreco tabelaPrecoHorista = tabelaPrecoRepository.findById(2L).orElseThrow(() -> new RuntimeException("n achou"));
