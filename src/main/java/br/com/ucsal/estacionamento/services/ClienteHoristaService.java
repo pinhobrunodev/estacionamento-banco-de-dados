@@ -52,8 +52,8 @@ public class ClienteHoristaService {
     @Transactional
     public String registrarSaida(String placa) {
         boolean placaMensalista = placasMensalistasRepository.existsByPlaca(placa);
-        if (placaMensalista){
-            Vaga vagaQueFicouLivre = vagaRepository.capturaVagaPelaPlaca(placa);        vagaQueFicouLivre.setPlaca(null);
+        if (placaMensalista) {
+            Vaga vagaQueFicouLivre = vagaRepository.capturaVagaPelaPlaca(placa);
             vagaQueFicouLivre.setPlaca(null);
             vagaQueFicouLivre.setOcupada(Boolean.FALSE);
             vagaRepository.save(vagaQueFicouLivre);
