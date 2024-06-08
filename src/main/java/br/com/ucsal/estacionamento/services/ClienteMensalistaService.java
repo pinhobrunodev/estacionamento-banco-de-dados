@@ -7,6 +7,7 @@ import br.com.ucsal.estacionamento.dto.TrazerClientesMensalistasEstacionados;
 import br.com.ucsal.estacionamento.entity.ClientesMensalistas;
 import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
 import br.com.ucsal.estacionamento.entity.Vaga;
+import br.com.ucsal.estacionamento.exception.NaoTemMaisVagasException;
 import br.com.ucsal.estacionamento.repositories.ClienteMensalistaRepository;
 import br.com.ucsal.estacionamento.repositories.PlacasMensalistasRepository;
 import br.com.ucsal.estacionamento.repositories.TabelaPrecoRepository;
@@ -41,7 +42,7 @@ public class ClienteMensalistaService {
         if (vagasLivresMensalista == 0) {
             Long vagasLivresHorista = vagaRepository.quantidadeVagasHoristasLivre();
             if (vagasLivresHorista == 0) {
-                throw new RuntimeException("NAO TEM MAIS VAGA NEM HORISTA E NEM MENSALISTA");
+                throw new NaoTemMaisVagasException("Sem vagas disponiveis.");
             } else {
                 PlacasMensalistas veiculoMensalistaSelecionado = placasMensalistasRepository.selecionaUmVeiculoMensalistaAleartorio(clienteMensalista.getId());
                 veiculoMensalistaSelecionado.setEntrada(LocalDateTime.now());

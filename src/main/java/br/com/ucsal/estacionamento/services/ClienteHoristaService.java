@@ -5,6 +5,7 @@ import br.com.ucsal.estacionamento.entity.PlacasHoristas;
 import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
 import br.com.ucsal.estacionamento.entity.TabelaPreco;
 import br.com.ucsal.estacionamento.entity.Vaga;
+import br.com.ucsal.estacionamento.exception.NaoTemMaisVagasException;
 import br.com.ucsal.estacionamento.repositories.ClienteHoristaRepository;
 import br.com.ucsal.estacionamento.repositories.PlacasMensalistasRepository;
 import br.com.ucsal.estacionamento.repositories.TabelaPrecoRepository;
@@ -36,7 +37,7 @@ public class ClienteHoristaService {
     public void registrarEntrada(String placa) {
         Long vagasLivresHorista = vagaRepository.quantidadeVagasHoristasLivre();
         if (vagasLivresHorista == 0) {
-            throw new RuntimeException("NAO TEM MAIS VAGA HORISTA");
+            throw new NaoTemMaisVagasException("Sem vagas disponiveis.");
         }
         PlacasHoristas placasHoristas = new PlacasHoristas();
         placasHoristas.setPlaca(placa);
