@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(NaoTemMaisVagasException.class)
-    public ResponseEntity<ErroResposta> handleProductException(NaoTemMaisVagasException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErroResposta(e.getMessage()));
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErroResposta> handleProductException(BusinessException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErroResposta(e.getMessage()));
     }
 }

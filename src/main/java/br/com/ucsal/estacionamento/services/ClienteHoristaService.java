@@ -2,10 +2,9 @@ package br.com.ucsal.estacionamento.services;
 
 import br.com.ucsal.estacionamento.dto.TrazerClientesHoristasEstacionados;
 import br.com.ucsal.estacionamento.entity.PlacasHoristas;
-import br.com.ucsal.estacionamento.entity.PlacasMensalistas;
 import br.com.ucsal.estacionamento.entity.TabelaPreco;
 import br.com.ucsal.estacionamento.entity.Vaga;
-import br.com.ucsal.estacionamento.exception.NaoTemMaisVagasException;
+import br.com.ucsal.estacionamento.exception.BusinessException;
 import br.com.ucsal.estacionamento.repositories.ClienteHoristaRepository;
 import br.com.ucsal.estacionamento.repositories.PlacasMensalistasRepository;
 import br.com.ucsal.estacionamento.repositories.TabelaPrecoRepository;
@@ -37,8 +36,13 @@ public class ClienteHoristaService {
     public void registrarEntrada(String placa) {
         Long vagasLivresHorista = vagaRepository.quantidadeVagasHoristasLivre();
         if (vagasLivresHorista == 0) {
-            throw new NaoTemMaisVagasException("Sem vagas disponiveis.");
+            throw new BusinessException("Sem vagas disponiveis.");
         }
+       var resp =  clienteHoristaRepository.findByPlaca(placa);
+       var resp2 = vagaRepository.capturaVagaPelaPlaca(placa);
+       if (resp.isPresent() && resp2 != null){
+           throw  new BusinessException("Placa ja existe e esta estacionada.");
+       }
         PlacasHoristas placasHoristas = new PlacasHoristas();
         placasHoristas.setPlaca(placa);
         placasHoristas.setEntrada(LocalDateTime.now());
@@ -60,9 +64,9 @@ public class ClienteHoristaService {
             vagaRepository.save(vagaQueFicouLivre);
             return "Não é necessário pagar a taxa, pois é um cliente mensalista que saiu de uma vaga horista";
         }
-        PlacasHoristas placaHorista = clienteHoristaRepository.findById(placa).orElseThrow(() -> new RuntimeException("n achou"));
+        PlacasHoristas placaHorista = clienteHoristaRepository.findById(placa).orElseThrow(() -> new BusinessException("Placa inexistente"));
         placaHorista.setSaida(LocalDateTime.now());
-        TabelaPreco tabelaPrecoHorista = tabelaPrecoRepository.findById(2L).orElseThrow(() -> new RuntimeException("n achou"));
+        TabelaPreco tabelaPrecoHorista = tabelaPrecoRepository.findById(2L).orElseThrow(() -> new BusinessException("Tabela inexistente"));
         clienteHoristaRepository.save(placaHorista);
         Vaga vagaQueFicouLivre = vagaRepository.capturaVagaPelaPlaca(placa);
         vagaQueFicouLivre.setPlaca(null);

@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NaoTemMaisVagasException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
     private String message;
 
-    public NaoTemMaisVagasException(String message){
+    public BusinessException(String message){
         this.message = message;
     }
 }
